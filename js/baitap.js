@@ -21,11 +21,11 @@ Personnel.prototype.totaLasary = function(){
     }else{
         return totaLasary ;
     }
-    
 }
 
 // phương thức sếp loại nhân viên
 Personnel.prototype.classification = function(){
+    // Kiểm tra nhân viên
     if(this.workTime < 160){
         return "Nhân viên trung bình";
     }else if(this.workTime < 176){
@@ -37,7 +37,6 @@ Personnel.prototype.classification = function(){
     }
 }
  
-
 // tạo mảng chứa danh sách nhân viên
 var peoples = [];
 
@@ -58,8 +57,8 @@ function init(){
     }
 
     display(peoples);
-    
 }
+
 
 // Hàm thêm sinh viên
 function addUser(){
@@ -80,7 +79,6 @@ function addUser(){
         alert("vui lòng nhập các giá trị");
         return ;
     }
-    
 
     var nhanVien = new Personnel(user, name, email, password, day, basicSalary, office, workTime);
 
@@ -149,8 +147,6 @@ function detele(IDNhanVien){
     }
     // sau khi xóa nhân viên ta ccaafn cập nhật peoples mới xuống local storage
     localStorage.setItem("peoples" , JSON.stringify(peoples));
-
-
 }
 
 
@@ -182,7 +178,22 @@ function resetFormt(){
 
     document.getElementById("btnThemNV").disabled = false ;
     document.getElementById("tknv").disabled = false ;
+
+    document.getElementById("tbTKNV").innerHTML = "";
+    document.getElementById("tbTen").innerHTML ="";
+    document.getElementById("tbEmail").innerHTML = "";
+    document.getElementById("tbMatKhau").innerHTML = "";
+    document.getElementById("tbNgay").innerHTML = "";
+    document.getElementById("tbLuongCB").innerHTML = "";
+    document.getElementById("tbChucVu").innerHTML = "";
+    document.getElementById("tbGiolam").innerHTML = "";
     
+}
+
+// hàm đóng formt
+function close(){
+   resetFormt();
+
 }
 
 // hàm cập nhật lên formt
@@ -218,6 +229,13 @@ function upDate(){
     var office = document.getElementById("chucvu").value ;
     var workTime = +document.getElementById("gioLam").value ;
 
+    // Kiểm tra các input
+    var valid = validation();
+
+     if(!valid){
+        alert("vui lòng nhập các giá trị");
+        return ;
+     }
     var nhanVien2 = new Personnel(user, name, email, password, day, basicSalary, office, workTime);
 
     // tìm nhân viên muốn chỉnh sửa
@@ -229,14 +247,13 @@ function upDate(){
     display(peoples);
     resetFormt();   
 
-    // sau khi cập nhật ta cân fluuw thông tin xuống local storage
+    // sau khi cập nhật ta cần lưu thông tin xuống local storage
     localStorage.setItem("peoples" , JSON.stringify(peoples));
 
 }
 
 
 // Hàm search
-
 function search(){
     var searchValue = document.getElementById("searchName").value ;
     var searchValue = searchValue.toLowerCase();
@@ -269,140 +286,122 @@ function validation(){
     // alert(taiKhoanNV);
     var valid = true ;
    
+    var tbTKNV = document.getElementById("tbTKNV");
     // Kiểm tra tên tài khoản nhân viên
     if(!checkInput(user)){
         valid = false ;
-        document.getElementById("tbTKNV").innerHTML = 
-       "Tài khoản không được để trống"
+        tbTKNV.innerHTML = "Tài khoản không được để trống"
+    }else if(!length( user , 6 , 4)){
+        tbTKNV.innerHTML = "Tài khoản có tối thiểu 4-6 kí tự"
     }else{
-
-        document.getElementById("tbTKNV").innerHTML = "";
-    }
-    if(!length( user , 6 , 4)){
-        valid = false;
-        document.getElementById("tbTKNV").innerHTML = 
-        "Tài khoản có tối thiểu 4-6 kí tự"
+        tbTKNV.innerHTML = "";
     }
     
 
-
-    var checkName= new RegExp ("^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W| ]+$") ;
-	
     // kiểm tra tên nhân viên
+    var checkName= new RegExp ("^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W| ]+$") ;
+	var tbTen = document.getElementById("tbTen");
     if(!checkInput(name)){
         valid = false ;
-        document.getElementById("tbTen").innerHTML =
-         "Tên không được để trống"
+        tbTen.innerHTML ="Tên không được để trống"
     }else if(!checkName.test(name)){
         valid = false;
-        document.getElementById("tbTen").innerHTML = 
-        "Tên người dùng không đúng kí tự"
+        tbTen.innerHTML ="Tên người dùng không đúng kí tự"
     }
     else{
-        document.getElementById("tbTen").innerHTML ="";
-
+        tbTen.innerHTML ="";
     }
     
     // kiểm tra email 
-
     var emailPattern = new RegExp("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$")
+    var tbEmail = document.getElementById("tbEmail");
+
     if(!checkInput(email)){
         valid = false ;
-        document.getElementById("tbEmail").innerHTML = 
-        "Điền Email không được để trống"
+        tbEmail.innerHTML = "Điền Email không được để trống"
     }else if(!emailPattern.test(email)){
         valid = false ;
-        document.getElementById("tbEmail").innerHTML =
-        "Email không đúng định dạng"
+        tbEmail.innerHTML ="Email không đúng định dạng"
     }
     else{
-        document.getElementById("tbEmail").innerHTML = "";
-
+        tbEmail.innerHTML = "";
     }
-
 
     // kiểm tra password
     var pwPattern = new RegExp 
      ("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$")
-    // var pwPattern = new RegExp ("^[A-Za-z]+$")
+
+     var tbMatKhau = document.getElementById("tbMatKhau")
+
     if(!checkInput(password)){
         valid = false ;
-        document.getElementById("tbMatKhau").innerHTML = 
-        "Nhập mật khẩu"
+        tbMatKhau.innerHTML = "Nhập mật khẩu"
     }else if(!length (password ,10) ){
         valid = false ;
-        document.getElementById("tbMatKhau").innerHTML = 
-        "Mật khẩu phải từ 6 - 10 kí tự"
-    
+        tbMatKhau.innerHTML ="Mật khẩu phải từ 6 - 10 kí tự"
     }else if(!pwPattern.test(password)){
         valid = false;
-        document.getElementById("tbMatKhau").innerHTML = 
-        "mật khẩu phải có số, chữ thường và chữ in hoa"
+        tbMatKhau.innerHTML = "mật khẩu phải có số, chữ thường và chữ in hoa"
     }
     else{
-        document.getElementById("tbMatKhau").innerHTML = "";
-
+        tbMatKhau.innerHTML = "";
     }
 
     // kiểm tra ngày làm
-    var dayPattern = new RegExp("^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$")
+    var dayPattern = new RegExp("^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$");
+
+    var tbNgay = document.getElementById("tbNgay");
+
     if(!checkInput(day)){
         valid = false;
-        document.getElementById("tbNgay").innerHTML = 
-        "Ngày làm không được để trống"
+        tbNgay.innerHTML = "Ngày làm không được để trống"
     
     }else if(!dayPattern.test(day)){
         valid = false;
-        document.getElementById("tbNgay").innerHTML = 
-        "Nhập tháng ngày năm"
+        tbNgay.innerHTML = "Nhập tháng ngày năm"
     }
     else{
-        document.getElementById("tbNgay").innerHTML = "";
-
+        tbNgay.innerHTML = "";
     }
 
     // kiểm tra lương cơ bản
+    var tbLuongCB = document.getElementById("tbLuongCB");
+
     if(!checkInput(basicSalary)){
         valid = false ;
-        document.getElementById("tbLuongCB").innerHTML = 
-        "Nhập lương cơ bản"
-    }else if((basicSalary > 20e6 || 10e6 >basicSalary )){
+        tbLuongCB.innerHTML = "Nhập lương cơ bản"
+    }else if((basicSalary > 20e6 || 1e6 >basicSalary )){
         valid = false;
-        document.getElementById("tbLuongCB").innerHTML = 
-        "Nhập đúng mức lương 10000000-20000000"
+        tbLuongCB.innerHTML ="Nhập đúng mức lương 1.000.000-20.000.000"
     }
     else{
-        document.getElementById("tbLuongCB").innerHTML = "";
-
+        tbLuongCB.innerHTML = "";
     }
 
     // kiểm tra chức vụ
+    var tbChucVu = document.getElementById("tbChucVu");
     if(!checkInput(office)){
         valid = false;
-        document.getElementById("tbChucVu").innerHTML = 
-        "Chọn chức vụ"
+        tbChucVu.innerHTML ="Chọn chức vụ"
     }else if (office === "Chọn chức vụ"){
         valid = false ;
-        document.getElementById("tbChucVu").innerHTML = 
-        "Chọn chức vụ"
+        tbChucVu.innerHTML = "Chọn chức vụ"
     }
     else{
-        document.getElementById("tbChucVu").innerHTML = "" ;
-
+        tbChucVu.innerHTML = "" ;
     }
 
     // kiểm tra giờ làm
+    var tbGiolam = document.getElementById("tbGiolam");
     if(!checkInput(workTime)){
         valid = false ;
-        document.getElementById("tbGiolam").innerHTML = 
-        "Nhập giờ làm"
+        tbGiolam.innerHTML ="Nhập giờ làm"
     }else if (workTime > 200 || workTime < 80 ){
         valid = false ;
-        document.getElementById("tbGiolam").innerHTML =
-        "Số giờ làm từ 80 - 200"
+        tbGiolam.innerHTML = "Số giờ làm từ 80 - 200"
     }
     else{
-        document.getElementById("tbGiolam").innerHTML = "";
+        tbGiolam.innerHTML = "";
     }
 
     return valid;
