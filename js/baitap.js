@@ -1,6 +1,6 @@
 // Định nghĩa lớp đối tượng
-function  Personnel(user, name, email, password, day, basicSalary, office, workTime){
-    this.user = user;
+function  Personnel(id, name, email, password, day, basicSalary, office, workTime){
+    this.id = id;
     this.name = name;
     this.email = email;
     this.password = password;
@@ -53,7 +53,7 @@ function init(){
     // Bởi vì local storage tự động loại bỏ các phương thức bên trong object => nên ta dùng vòng lặp để gán lại các phương thức cho object đó
     for(var i = 0; i < peoples.length ; i++){
         var nhanVien = peoples[i];
-        peoples[i] = new Personnel(nhanVien.user, nhanVien.name, nhanVien.email, nhanVien.password, nhanVien.day, nhanVien.basicSalary, nhanVien.office, nhanVien.workTime )
+        peoples[i] = new Personnel(nhanVien.id, nhanVien.name, nhanVien.email, nhanVien.password, nhanVien.day, nhanVien.basicSalary, nhanVien.office, nhanVien.workTime )
     }
 
     display(peoples);
@@ -63,7 +63,7 @@ function init(){
 // Hàm thêm sinh viên
 function addUser(){
     // B1 : DOM lấy value từ input
-    var user = document.getElementById("tknv").value ;
+    var id = document.getElementById("tknv").value ;
     var name = document.getElementById("name").value;
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
@@ -80,7 +80,7 @@ function addUser(){
         return ;
     }
 
-    var nhanVien = new Personnel(user, name, email, password, day, basicSalary, office, workTime);
+    var nhanVien = new Personnel(id, name, email, password, day, basicSalary, office, workTime);
 
     peoples.push(nhanVien);
 
@@ -108,7 +108,7 @@ function display(peoples){
         // Với mội nhân viên tạo ra một tr chứa nội dung thông tin của nhân viên đó
         manHinh +=`
             <tr>
-                <td>${nhanVien.user}</td>
+                <td>${nhanVien.id}</td>
                 <td>${nhanVien.name}</td>
                 <td>${nhanVien.email}</td>
                 <td>${nhanVien.day}</td>
@@ -117,10 +117,10 @@ function display(peoples){
                 <td>${nhanVien.classification()}</td>
                 <td>
                     <button class="btn btn-danger" 
-                    onclick="detele('${nhanVien.user}')">Delete</button>
+                    onclick="detele('${nhanVien.id}')">Delete</button>
                    
                     <button class="btn btn-success" id="btnThem"
-					onclick="edit('${nhanVien.user}')"data-toggle="modal"
+					onclick="edit('${nhanVien.id}')"data-toggle="modal"
 					data-target="#myModal">Edit</button>
                 </td>
             </tr>
@@ -156,7 +156,7 @@ function maNV(IDNhanVien){
     // dùng vòng lặp để tìm maNV cần xóa
     for(var i = 0 ; i < peoples.length ; i++ ){
         // kiểm tra phần tử tỏng mảng peoples có mã khớp với mã nhân viên không;
-        if(peoples[i].user === IDNhanVien){
+        if(peoples[i].id === IDNhanVien){
             index = i ;
             break;
         }
@@ -167,6 +167,7 @@ function maNV(IDNhanVien){
 
 // hàm reset formt
 function resetFormt(){
+    // reset input
     document.getElementById("tknv").value = "" ;
     document.getElementById("name").value = "" ;
     document.getElementById("email").value = "" ;
@@ -179,6 +180,7 @@ function resetFormt(){
     document.getElementById("btnThemNV").disabled = false ;
     document.getElementById("tknv").disabled = false ;
 
+    // reset thông báo lỗi
     document.getElementById("tbTKNV").innerHTML = "";
     document.getElementById("tbTen").innerHTML ="";
     document.getElementById("tbEmail").innerHTML = "";
@@ -190,12 +192,6 @@ function resetFormt(){
     
 }
 
-// hàm đóng formt
-function close(){
-   resetFormt();
-
-}
-
 // hàm cập nhật lên formt
 function edit(IDNhanVien){
     var index = maNV(IDNhanVien);
@@ -204,7 +200,7 @@ function edit(IDNhanVien){
 
     // console.log(nhanVien1);
     // đưa thông tin của nhân viên lên lại formt
-    document.getElementById("tknv").value = nhanVien1.user;
+    document.getElementById("tknv").value = nhanVien1.id;
     document.getElementById("name").value = nhanVien1.name;
     document.getElementById("email").value = nhanVien1.email; 
     document.getElementById("password").value = nhanVien1.password;
@@ -220,7 +216,7 @@ function edit(IDNhanVien){
 // Cập nhật lại nhân viên đã chỉnh sửa
 function upDate(){
     // B1 : DOM lấy input
-    var user = document.getElementById("tknv").value ;
+    var id = document.getElementById("tknv").value ;
     var name = document.getElementById("name").value;
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
@@ -236,10 +232,10 @@ function upDate(){
         alert("vui lòng nhập các giá trị");
         return ;
      }
-    var nhanVien2 = new Personnel(user, name, email, password, day, basicSalary, office, workTime);
+    var nhanVien2 = new Personnel(id, name, email, password, day, basicSalary, office, workTime);
 
     // tìm nhân viên muốn chỉnh sửa
-    var index = maNV(nhanVien2.user);
+    var index = maNV(nhanVien2.id);
     // console.log(index);
     peoples[index] = nhanVien2 ;
     
@@ -274,7 +270,7 @@ function search(){
 // hàm kiểm tra điều kiện các input
 function validation(){
     // B1 : DOM lấy value từ inout
-    var user = document.getElementById("tknv").value ;
+    var id = document.getElementById("tknv").value ;
     var name = document.getElementById("name").value;
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
@@ -286,13 +282,17 @@ function validation(){
     // alert(taiKhoanNV);
     var valid = true ;
    
-    var tbTKNV = document.getElementById("tbTKNV");
     // Kiểm tra tên tài khoản nhân viên
-    if(!checkInput(user)){
+    var tbTKNV = document.getElementById("tbTKNV");
+    var idPartern = new RegExp ("^-?[0-9][0-9,\.]+$")
+    if(!checkInput(id)){
         valid = false ;
-        tbTKNV.innerHTML = "Tài khoản không được để trống"
-    }else if(!length( user , 6 , 4)){
+        tbTKNV.innerHTML = "Tài khoản là các ký số"
+    }else if(!length( id , 6 , 4)){
         tbTKNV.innerHTML = "Tài khoản có tối thiểu 4-6 kí tự"
+    }else if(!idPartern.test(id)){
+        valid = false ;
+        tbTKNV.innerHTML = "Tài khoản là các ký số"
     }else{
         tbTKNV.innerHTML = "";
     }
@@ -313,7 +313,8 @@ function validation(){
     }
     
     // kiểm tra email 
-    var emailPattern = new RegExp("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$")
+    var emailPattern = new RegExp
+    ("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$")
     var tbEmail = document.getElementById("tbEmail");
 
     if(!checkInput(email)){
@@ -348,7 +349,8 @@ function validation(){
     }
 
     // kiểm tra ngày làm
-    var dayPattern = new RegExp("^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$");
+    var dayPattern = new RegExp
+    ("^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$");
 
     var tbNgay = document.getElementById("tbNgay");
 
@@ -407,7 +409,6 @@ function validation(){
     return valid;
 
 }
-
 
 // hàm kiểm tra input có trống hay không
 function checkInput(value){
