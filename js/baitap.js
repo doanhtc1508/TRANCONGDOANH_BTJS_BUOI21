@@ -284,16 +284,17 @@ function validation(){
    
     // Kiểm tra tên tài khoản nhân viên
     var tbTKNV = document.getElementById("tbTKNV");
-    var idPartern = new RegExp ("^-?[0-9][0-9,\.]+$")
+    var idPartern = new RegExp ("^-?[0-9][0-9,\.]+.{4,6}$")
     if(!checkInput(id)){
         valid = false ;
         tbTKNV.innerHTML = "Tài khoản là các ký số"
-    }else if(!length( id , 6 , 4)){
-        tbTKNV.innerHTML = "Tài khoản có tối thiểu 4-6 kí tự"
     }else if(!idPartern.test(id)){
         valid = false ;
         tbTKNV.innerHTML = "Tài khoản là các ký số"
-    }else{
+    }
+    // }else if(!length( id , 6 , 4)){
+    //     tbTKNV.innerHTML = "Tài khoản có tối thiểu 4-6 kí tự"
+    else{
         tbTKNV.innerHTML = "";
     }
     
