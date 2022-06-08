@@ -290,7 +290,7 @@ function validation(){
         tbTKNV.innerHTML = "Tài khoản là các ký số"
     }else if(!idPartern.test(id)){
         valid = false ;
-        tbTKNV.innerHTML = "Tài khoản là các ký số"
+        tbTKNV.innerHTML = "Tài khoản là các ký số, từ 4 - 6 ký số"
     }
     // }else if(!length( id , 6 , 4)){
     //     tbTKNV.innerHTML = "Tài khoản có tối thiểu 4-6 kí tự"
